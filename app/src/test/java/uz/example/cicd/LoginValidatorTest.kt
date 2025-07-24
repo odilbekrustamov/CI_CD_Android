@@ -12,7 +12,7 @@ class LoginValidatorTest {
 
     @Test
     fun `email without @ is invalid`() {
-        assertFalse(!LoginValidator.isEmailValid("hellogmail.com"))
+        assertFalse(LoginValidator.isEmailValid("hellogmail.com"))
     }
 
     @Test
