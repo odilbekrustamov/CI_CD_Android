@@ -2,44 +2,66 @@ name: Android CI
 
 on:
   push:
-    branches: [ ci_cd_test ]
+    branches: [ ci_cd_test ] # Trigger the workflow on push to 'ci_cd_test' branch
   pull_request:
-    branches: [ main ]
+    branches: [ main ] # Trigger the workflow on PR targeting the 'main' branch
 
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest # Use the latest Ubuntu runner
 
     steps:
-      # 1. Loyihani yuklab olish
+      # 1. Checkout the project from the repository
       - name: Checkout project
         uses: actions/checkout@v2
 
-      # 2. JDK 17 ni o‘rnatish (Android uchun kerak)
+      # 2. Set up JDK 17 (required for modern Android builds)
       - name: Set up JDK 17
         uses: actions/setup-java@v2
         with:
-          distribution: 'temurin'
+          distribution: 'temurin' # Temurin is a recommended OpenJDK distribution
           java-version: '17'
 
-      # 3. gradlew fayliga ruxsat berish (Linux uchun)
+      # 3. Give execution permission to the Gradle wrapper script
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
 
-      # 4. Gradle dependencies (caching tavsiya qilinadi)
+      # 4. Download all Gradle dependencies (can be cached for faster builds)
       - name: Download Gradle dependencies
         run: ./gradlew dependencies
 
-      # 5. Unit testlarni ishga tushurish
+      # 5. Run unit tests (local JVM-based tests)
       - name: Run Unit Tests
         run: ./gradlew testDebugUnitTest
 
-      # 6. Debug APK build qilish
+      # 6. Run Android Lint (checks for XML and Java/Kotlin best practices)
+      - name: Run Lint
+        run: ./gradlew lintDebug
+
+      # 7. Run Detekt (static code analysis for Kotlin - detects code smells and anti-patterns)
+      - name: Run Detekt
+        run: ./gradlew detekt
+
+      # 8. Run Jacoco for code coverage report generation
+      - name: Run Jacoco
+        run: ./gradlew jacocoTestReport
+
+      # 9. Notify team via Telegram if the CI workflow passes successfully
+      - name: Notify via Telegram
+        run: |
+          curl -s -X POST https://api.telegram.org/bot$BOT_TOKEN/sendMessage \
+            -d chat_id=$CHAT_ID \
+            -d text="✅ CI Passed for $GITHUB_REPOSITORY"
+        env:
+          BOT_TOKEN: 7643889823:AAECwLRHIxIeVj59yoRsFIUkSJxulxKU4ZI
+          CHAT_ID: -4870428321
+
+      # 10. Build the Debug APK
       - name: Build Debug APK
         run: ./gradlew assembleDebug
 
-      # 7. APK faylni artifact sifatida yuklash
+      # 11. Upload the generated APK as an artifact to GitHub Actions
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
