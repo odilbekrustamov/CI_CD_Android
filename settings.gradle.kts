@@ -21,4 +21,3 @@ dependencyResolutionManagement {
 
 rootProject.name = "CI_CD_App"
 include(":app")
- 
