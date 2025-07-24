@@ -12,27 +12,34 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # 1. Loyihani yuklab olish
       - name: Checkout project
         uses: actions/checkout@v2
 
+      # 2. JDK 17 ni o‘rnatish (Android uchun kerak)
       - name: Set up JDK 17
         uses: actions/setup-java@v2
         with:
           distribution: 'temurin'
           java-version: '17'
 
+      # 3. gradlew fayliga ruxsat berish (Linux uchun)
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
 
+      # 4. Gradle dependencies (caching tavsiya qilinadi)
       - name: Download Gradle dependencies
         run: ./gradlew dependencies
 
+      # 5. Unit testlarni ishga tushurish
       - name: Run Unit Tests
         run: ./gradlew testDebugUnitTest
 
+      # 6. Debug APK build qilish
       - name: Build Debug APK
         run: ./gradlew assembleDebug
 
+      # 7. APK faylni artifact sifatida yuklash
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:

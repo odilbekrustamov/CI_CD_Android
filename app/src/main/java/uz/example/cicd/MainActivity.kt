@@ -20,9 +20,10 @@ class MainActivity : ComponentActivity() {
         setContent {
             CI_CD_AppTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = getGreeting(),
-                        modifier = Modifier.padding(innerPadding)
+                    LoginScreen(
+                        modifier = Modifier.padding(innerPadding),
+                        onLoginClicked = { email, password ->
+                        }
                     )
                 }
             }
@@ -30,22 +31,13 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "$name!",
-        modifier = modifier
-    )
-}
-
-fun getGreeting(): String {
-    return "Hello CI/CD"
-}
-
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
     CI_CD_AppTheme {
-        Greeting(getGreeting())
+        LoginScreen(
+            onLoginClicked = { email, password ->
+            }
+        )
     }
 }
