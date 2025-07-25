@@ -1,0 +1,50 @@
+root = true
+
+# === General settings for all file types ===
+[*]
+# Use UTF-8 character encoding
+charset = utf-8
+
+# Use LF (Unix-style) line endings
+end_of_line = lf
+
+# Always insert a newline at the end of the file
+insert_final_newline = true
+
+# Remove any trailing whitespace characters on save
+trim_trailing_whitespace = true
+
+# Use 4 spaces per indentation level
+indent_style = space
+indent_size = 4
+
+# === Specific settings for Kotlin and Kotlin Script files ===
+[*.{kt,kts}]
+# Use 4 spaces for line continuations
+continuation_indent_size = 4
+
+# Maximum allowed line length
+max_line_length = 100
+
+# Disable rules that are too strict or unnecessary for Compose
+# - final-newline: already handled by insert_final_newline
+# - import-ordering: handled by IDE or Ktlint config
+disabled_rules = final-newline, import-ordering, function-expression-body
+
+# Allow PascalCase function names for @Composable functions (e.g., GreetingPreview)
+ktlint_function_naming_ignore_when_annotated_with = Composable
+
+# === IDE-specific Kotlin settings ===
+# Organize imports in a specific order to improve readability
+ij_kotlin_imports_layout = *,android.**,com.**,java.**,javax.**,kotlin.**
+
+# Allow trailing commas where supported (e.g., multiline lists, function arguments)
+ij_kotlin_allow_trailing_comma = true
+
+# === Custom formatting preferences ===
+# Disallow wildcard imports (e.g., import java.util.*)
+no-wildcard-imports = true
+
+# Prevent multiple empty lines in a row
+no-multiple-blank-lines = true
+no-consecutive-blank-lines = true

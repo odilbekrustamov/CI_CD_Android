@@ -1,0 +1,24 @@
+style:
+  MagicNumber:
+    active: false
+    ignoreHashCodeFunction: true
+
+  UnusedPrivateMember:
+    active: true
+
+naming:
+  VariableNaming:
+    active: true
+    variablePattern: '^[a-z][A-Za-z0-9]*$' # camelCase
+
+  FunctionNaming:
+    active: true
+    functionPattern: '^([a-z][A-Za-z0-9]*|[A-Z][A-Za-z0-9]*)$' # camelCase or PascalCase
+
+  ClassNaming:
+    active: true
+    classPattern: '^[A-Z][a-zA-Z0-9]*$' # PascalCase
+
+comments:
+  CommentOverPrivateFunction:
+    active: false

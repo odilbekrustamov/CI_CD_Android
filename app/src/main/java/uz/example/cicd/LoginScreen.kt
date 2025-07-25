@@ -22,20 +22,21 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun LoginScreen(
     modifier: Modifier = Modifier,
-    onLoginClicked: (String, String) -> Unit
+    onLoginClicked: (String, String) -> Unit,
 ) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
     Column(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(16.dp)
+        modifier =
+            modifier
+                .fillMaxSize()
+                .padding(16.dp),
     ) {
         Text(
             text = "Login",
             style = MaterialTheme.typography.headlineMedium,
-            modifier = Modifier.testTag("header")
+            modifier = Modifier.testTag("header"),
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -44,9 +45,10 @@ fun LoginScreen(
             value = email,
             onValueChange = { email = it },
             label = { Text("Email") },
-            modifier = Modifier
-                .fillMaxWidth()
-                .testTag("emailField")
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .testTag("emailField"),
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -55,18 +57,20 @@ fun LoginScreen(
             value = password,
             onValueChange = { password = it },
             label = { Text("Password") },
-            modifier = Modifier
-                .fillMaxWidth()
-                .testTag("passwordField")
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .testTag("passwordField"),
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(
             onClick = { onLoginClicked(email, password) },
-            modifier = Modifier
-                .fillMaxWidth()
-                .testTag("loginButton")
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .testTag("loginButton"),
         ) {
             Text("Login")
         }

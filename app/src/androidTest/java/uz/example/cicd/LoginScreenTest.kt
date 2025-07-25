@@ -1,13 +1,15 @@
 package uz.example.cicd
 
-import androidx.compose.ui.test.*
+import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performTextInput
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
 class LoginScreenTest {
-
     @get:Rule
     val composeTestRule = createComposeRule()
 
@@ -15,7 +17,7 @@ class LoginScreenTest {
     fun setup() {
         composeTestRule.setContent {
             LoginScreen(
-                onLoginClicked = { _, _ -> }
+                onLoginClicked = { _, _ -> },
             )
         }
     }

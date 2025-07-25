@@ -1,8 +1,14 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     id("jacoco")
+    id("org.jlleitschuh.gradle.ktlint")
+    id("io.gitlab.arturbosch.detekt") version "1.23.8"
+    id("org.jetbrains.kotlin.kapt")
+    id("dagger.hilt.android.plugin")
 }
 
 android {
@@ -24,22 +30,37 @@ android {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
         }
+    }
+    testOptions {
+        unitTests.isIncludeAndroidResources = true
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
-    kotlinOptions {
-        jvmTarget = "11"
+    kotlin {
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_11)
+        }
     }
     buildFeatures {
         compose = true
     }
     testOptions {
         unitTests.isIncludeAndroidResources = true
+    }
+    ktlint {
+        android.set(true)
+        outputToConsole.set(true)
+        verbose.set(true)
+    }
+    detekt {
+        config.setFrom(files("$rootDir/.detekt.yml"))
+        buildUponDefaultConfig = true
+        allRules = false
     }
 }
 
@@ -53,6 +74,7 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.androidx.navigation.compose)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -60,6 +82,23 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    // Hilt
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
+
+    // Room
+    implementation(libs.room.runtime)
+    kapt(libs.room.compiler)
+    implementation(libs.room.ktx)
+
+    // ViewModel & Lifecycle
+    implementation(libs.lifecycle.viewmodel.ktx)
+    implementation(libs.lifecycle.runtime.ktx)
+    implementation(libs.lifecycle.viewmodel.compose)
+
+    // Hilt Navigation Compose
+    implementation(libs.hilt.navigation.compose)
 }
 
 jacoco {
@@ -81,16 +120,30 @@ tasks.register<JacocoReport>("jacocoTestReport") {
         },
         fileTree("build/tmp/kotlin-classes/debug") {
             exclude("**/R.class", "**/R$*.class", "**/BuildConfig.*", "**/Manifest*.*")
-        }
+        },
     )
 
     sourceDirectories.setFrom(
-        files("src/main/java", "src/main/kotlin")
+        files("src/main/java", "src/main/kotlin"),
     )
 
     executionData.setFrom(
-        fileTree(buildDir) {
+        fileTree(layout.buildDirectory) {
             include("jacoco/testDebugUnitTest.exec")
-        }
+        },
     )
+}
+tasks.register("ciFull") {
+    dependsOn(
+        "ktlintCheck",
+        "detekt",
+        "lintDebug",
+        "testDebugUnitTest",
+        "jacocoTestReport",
+        "assembleDebug",
+    )
+}
+
+tasks.register("verifyCodeQuality") {
+    dependsOn("ktlintCheck", "detekt", "lintDebug")
 }

@@ -1,10 +1,10 @@
 package uz.example.cicd
 
-import org.junit.Assert.*
+import junit.framework.TestCase.assertFalse
+import junit.framework.TestCase.assertTrue
 import org.junit.Test
 
 class LoginValidatorTest {
-
     @Test
     fun `email with @ is valid`() {
         assertTrue(LoginValidator.isEmailValid("hello@gmail.com"))

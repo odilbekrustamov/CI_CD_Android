@@ -2,68 +2,78 @@ name: Android CI
 
 on:
   push:
-    branches: [ ci_cd_test ] # Trigger the workflow on push to 'ci_cd_test' branch
+    branches: [ ci_cd_test ]
   pull_request:
-    branches: [ main ] # Trigger the workflow on PR targeting the 'main' branch
+    branches: [ main ]
 
 jobs:
-  build:
+  lint:
+    uses: ./.github/workflows/ktlint.yml
 
-    runs-on: ubuntu-latest # Use the latest Ubuntu runner
+  build:
+    runs-on: ubuntu-latest
 
     steps:
-      # 1. Checkout the project from the repository
       - name: Checkout project
         uses: actions/checkout@v2
 
-      # 2. Set up JDK 17 (required for modern Android builds)
+      # 💡 1. Gradle Cache (early for faster builds)
+      - name: Cache Gradle packages
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
       - name: Set up JDK 17
         uses: actions/setup-java@v2
         with:
-          distribution: 'temurin' # Temurin is a recommended OpenJDK distribution
+          distribution: 'temurin'
           java-version: '17'
 
-      # 3. Give execution permission to the Gradle wrapper script
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
 
-      # 4. Download all Gradle dependencies (can be cached for faster builds)
       - name: Download Gradle dependencies
         run: ./gradlew dependencies
 
-      # 5. Run unit tests (local JVM-based tests)
+      # ✅ Unit testing
       - name: Run Unit Tests
         run: ./gradlew testDebugUnitTest
 
-      # 6. Run Android Lint (checks for XML and Java/Kotlin best practices)
-      - name: Run Lint
-        run: ./gradlew lintDebug
-
-      # 7. Run Detekt (static code analysis for Kotlin - detects code smells and anti-patterns)
-      - name: Run Detekt
-        run: ./gradlew detekt
-
-      # 8. Run Jacoco for code coverage report generation
+      # ✅ Code coverage
       - name: Run Jacoco
         run: ./gradlew jacocoTestReport
 
-      # 9. Notify team via Telegram if the CI workflow passes successfully
-      - name: Notify via Telegram
-        run: |
-          curl -s -X POST https://api.telegram.org/bot$BOT_TOKEN/sendMessage \
-            -d chat_id=$CHAT_ID \
-            -d text="✅ CI Passed for $GITHUB_REPOSITORY"
-        env:
-          BOT_TOKEN: 7643889823:AAECwLRHIxIeVj59yoRsFIUkSJxulxKU4ZI
-          CHAT_ID: -4870428321
+      # ✅ Code quality tools
+      - name: Run Lint
+        run: ./gradlew lintDebug
 
-      # 10. Build the Debug APK
+      - name: Run Detekt
+        run: ./gradlew detekt
+
+      - name: Run ktlint
+        run: ./gradlew ktlintCheck
+
+      # ✅ APK build
       - name: Build Debug APK
         run: ./gradlew assembleDebug
 
-      # 11. Upload the generated APK as an artifact to GitHub Actions
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
           name: debug-apk
           path: app/build/outputs/apk/debug/app-debug.apk
+
+      # ✅ Telegram notification
+      - name: Notify via Telegram
+        run: |
+            curl -s -X POST https://api.telegram.org/bot$BOT_TOKEN/sendMessage \
+              -d chat_id=$CHAT_ID \
+              -d text="✅ CI Passed for $GITHUB_REPOSITORY"
+        env:
+            BOT_TOKEN: 7643889823:AAECwLRHIxIeVj59yoRsFIUkSJxulxKU4ZI
+            CHAT_ID: -4870428321
