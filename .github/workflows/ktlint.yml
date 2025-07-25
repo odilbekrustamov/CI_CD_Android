@@ -1,0 +1,25 @@
+name: Ktlint Check
+
+on:
+  workflow_call:
+
+jobs:
+  ktlint:
+    name: Run Ktlint
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'temurin'
+          java-version: 17
+
+      - name: Give execute permission to Gradle
+        run: chmod +x ./gradlew
+
+      - name: Run Ktlint
+        run: ./gradlew ktlintCheck

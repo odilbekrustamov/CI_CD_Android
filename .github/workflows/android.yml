@@ -7,6 +7,9 @@ on:
     branches: [ main ]
 
 jobs:
+  lint:
+    uses: ./.github/workflows/ktlint.yml
+
   build:
     runs-on: ubuntu-latest
 
@@ -41,6 +44,10 @@ jobs:
       - name: Run Unit Tests
         run: ./gradlew testDebugUnitTest
 
+      # ✅ Code coverage
+      - name: Run Jacoco
+        run: ./gradlew jacocoTestReport
+
       # ✅ Code quality tools
       - name: Run Lint
         run: ./gradlew lintDebug
@@ -50,10 +57,6 @@ jobs:
 
       - name: Run ktlint
         run: ./gradlew ktlintCheck
-
-      # ✅ Code coverage
-      - name: Run Jacoco
-        run: ./gradlew jacocoTestReport
 
       # ✅ Instrumentation test (emulator)
       - name: Set up Android Emulator and Run UI Tests

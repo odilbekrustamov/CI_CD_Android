@@ -1,0 +1,18 @@
+# Top-level configuration file for code style rules
+root = true
+
+# Apply these settings to all Kotlin (*.kt) files
+[*.kt]
+indent_size = 4                                                     # Set indentation size to 4 spaces
+continuation_indent_size = 4                                        # Indent wrapped lines by 4 spaces
+max_line_length = 100                                               # Maximum line length is 100 characters
+insert_final_newline = true                                         # Ensure file ends with a newline
+disabled_rules = final-newline                                      # Disable the "final-newline" rule (optional)
+ij_kotlin_imports_layout = *,java.**,javax.**,kotlin.**,android.**  # Define import ordering
+ij_kotlin_allow_trailing_comma = true                               # Allow trailing commas in collections and parameters
+
+# Apply these settings to both Kotlin and Kotlin Script (*.kt, *.kts) files
+[*.{kt,kts}]
+no-wildcard-imports = true                                          # Disallow wildcard imports (e.g., import java.util.*)
+no-multiple-blank-lines = true                                      # Disallow multiple blank lines
+no-consecutive-blank-lines = true                                   # Disallow consecutive blank lines
