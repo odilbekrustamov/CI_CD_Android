@@ -5,7 +5,6 @@ import junit.framework.TestCase.assertTrue
 import org.junit.Test
 
 class LoginValidatorTest {
-
     @Test
     fun `email with @ is valid`() {
         assertTrue(LoginValidator.isEmailValid("hello@gmail.com"))

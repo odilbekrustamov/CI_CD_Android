@@ -28,7 +28,7 @@ android {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
         }
     }
@@ -100,16 +100,30 @@ tasks.register<JacocoReport>("jacocoTestReport") {
         },
         fileTree("build/tmp/kotlin-classes/debug") {
             exclude("**/R.class", "**/R$*.class", "**/BuildConfig.*", "**/Manifest*.*")
-        }
+        },
     )
 
     sourceDirectories.setFrom(
-        files("src/main/java", "src/main/kotlin")
+        files("src/main/java", "src/main/kotlin"),
     )
 
     executionData.setFrom(
         fileTree(layout.buildDirectory) {
             include("jacoco/testDebugUnitTest.exec")
-        }
+        },
     )
+}
+tasks.register("ciFull") {
+    dependsOn(
+        "ktlintCheck",
+        "detekt",
+        "lintDebug",
+        "testDebugUnitTest",
+        "jacocoTestReport",
+        "assembleDebug",
+    )
+}
+
+tasks.register("verifyCodeQuality") {
+    dependsOn("ktlintCheck", "detekt", "lintDebug")
 }

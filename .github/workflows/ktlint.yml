@@ -18,6 +18,15 @@ jobs:
           distribution: 'temurin'
           java-version: 17
 
+      - name: Cache Gradle packages
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: ${{ runner.os }}-gradle
+
       - name: Give execute permission to Gradle
         run: chmod +x ./gradlew
 

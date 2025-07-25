@@ -10,7 +10,6 @@ import org.junit.Rule
 import org.junit.Test
 
 class LoginScreenTest {
-
     @get:Rule
     val composeTestRule = createComposeRule()
 
@@ -18,7 +17,7 @@ class LoginScreenTest {
     fun setup() {
         composeTestRule.setContent {
             LoginScreen(
-                onLoginClicked = { _, _ -> }
+                onLoginClicked = { _, _ -> },
             )
         }
     }
