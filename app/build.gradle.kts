@@ -125,5 +125,5 @@ tasks.register("ciFull") {
 }
 
 tasks.register("verifyCodeQuality") {
-    dependsOn("ktlintCheck", "detekt", "lintDebug")
+    dependsOn("ktlintCheck", "detekt", "lintDebug", "ktlintFormat")
 }

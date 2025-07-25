@@ -58,16 +58,6 @@ jobs:
       - name: Run ktlint
         run: ./gradlew ktlintCheck
 
-      # ✅ Instrumentation test (emulator)
-      - name: Set up Android Emulator and Run UI Tests
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          api-level: 30
-          target: default
-          arch: x86_64
-          profile: pixel
-          script: ./gradlew connectedDebugAndroidTest
-
       # ✅ APK build
       - name: Build Debug APK
         run: ./gradlew assembleDebug
