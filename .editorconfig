@@ -29,8 +29,7 @@ max_line_length = 100
 # Disable rules that are too strict or unnecessary for Compose
 # - final-newline: already handled by insert_final_newline
 # - import-ordering: handled by IDE or Ktlint config
-# disabled_rules = final-newline, import-ordering, function-expression-body
-disabled_rules = function-expression-body
+disabled_rules = final-newline, import-ordering, function-expression-body
 
 # Allow PascalCase function names for @Composable functions (e.g., GreetingPreview)
 ktlint_function_naming_ignore_when_annotated_with = Composable

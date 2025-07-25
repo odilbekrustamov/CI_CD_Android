@@ -4,5 +4,6 @@ import uz.example.cicd.domain.model.ToDoTask
 
 interface TaskRepository {
     suspend fun getTasks(): List<ToDoTask>
+
     suspend fun addTask(task: ToDoTask)
 }

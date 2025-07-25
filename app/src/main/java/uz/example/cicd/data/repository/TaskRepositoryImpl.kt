@@ -9,9 +9,7 @@ import uz.example.cicd.domain.repository.TaskRepository
 class TaskRepositoryImpl(
     private val dao: TaskDao,
 ) : TaskRepository {
-    override suspend fun getTasks(): List<ToDoTask> {
-        return dao.getTasks().map { it.toDomain() }
-    }
+    override suspend fun getTasks(): List<ToDoTask> = dao.getTasks().map { it.toDomain() }
 
     override suspend fun addTask(task: ToDoTask) {
         dao.addTask(task.toEntity())

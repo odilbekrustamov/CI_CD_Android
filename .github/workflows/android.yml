@@ -78,11 +78,10 @@ jobs:
 
       # ✅ Telegram notification
       - name: Notify via Telegram
-        if: success()
         run: |
-          curl -s -X POST https://api.telegram.org/bot$BOT_TOKEN/sendMessage \
-            -d chat_id=$CHAT_ID \
-            -d text="✅ CI Passed for $GITHUB_REPOSITORY"
+            curl -s -X POST https://api.telegram.org/bot$BOT_TOKEN/sendMessage \
+              -d chat_id=$CHAT_ID \
+              -d text="✅ CI Passed for $GITHUB_REPOSITORY"
         env:
-          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
-          CHAT_ID: ${{ secrets.CHAT_ID }}
+            BOT_TOKEN: 7643889823:AAECwLRHIxIeVj59yoRsFIUkSJxulxKU4ZI
+            CHAT_ID: -4870428321

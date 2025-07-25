@@ -10,28 +10,27 @@ import uz.example.cicd.domain.model.ToDoTask
 import uz.example.cicd.domain.usecase.GetTasksUseCase
 import javax.inject.Inject
 
-
 @HiltViewModel
-class HomeViewModel @Inject constructor(
-    private val getTasksUseCase: GetTasksUseCase
-) : ViewModel() {
+class HomeViewModel
+    @Inject
+    constructor(
+        private val getTasksUseCase: GetTasksUseCase,
+    ) : ViewModel() {
+        private val _tasks = mutableStateOf<List<ToDoTask>>(emptyList())
+        val tasks: State<List<ToDoTask>> = _tasks
 
+        private val _isLoading = mutableStateOf(true)
+        val isLoading: State<Boolean> = _isLoading
 
-    private val _tasks = mutableStateOf<List<ToDoTask>>(emptyList())
-    val tasks: State<List<ToDoTask>> = _tasks
+        init {
+            loadTasks()
+        }
 
-    private val _isLoading = mutableStateOf(true)
-    val isLoading: State<Boolean> = _isLoading
-
-    init {
-        loadTasks()
-    }
-
-    fun loadTasks() {
-        viewModelScope.launch {
-            _isLoading.value = true
-            _tasks.value = getTasksUseCase()
-            _isLoading.value = false
+        fun loadTasks() {
+            viewModelScope.launch {
+                _isLoading.value = true
+                _tasks.value = getTasksUseCase()
+                _isLoading.value = false
+            }
         }
     }
-}

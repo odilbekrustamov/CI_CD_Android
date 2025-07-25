@@ -14,17 +14,13 @@ import uz.example.cicd.domain.usecase.GetTasksUseCase
 @InstallIn(SingletonComponent::class)
 object TaskModule {
     @Provides
-    fun provideTaskRepository(dao: TaskDao): TaskRepository {
-        return TaskRepositoryImpl(dao)
-    }
+    fun provideTaskRepository(dao: TaskDao): TaskRepository = TaskRepositoryImpl(dao)
 
     @Provides
-    fun provideAddTaskUseCase(repository: TaskRepository): AddTaskUseCase {
-        return AddTaskUseCase(repository)
-    }
+    fun provideAddTaskUseCase(repository: TaskRepository): AddTaskUseCase =
+        AddTaskUseCase(repository)
 
     @Provides
-    fun provideGetTasksUseCase(repository: TaskRepository): GetTasksUseCase {
-        return GetTasksUseCase(repository)
-    }
+    fun provideGetTasksUseCase(repository: TaskRepository): GetTasksUseCase =
+        GetTasksUseCase(repository)
 }

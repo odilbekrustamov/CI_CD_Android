@@ -12,34 +12,36 @@ import uz.example.cicd.domain.usecase.AddTaskUseCase
 import javax.inject.Inject
 
 @HiltViewModel
-class TaskViewModel @Inject constructor(
-    private val addTaskUseCase: AddTaskUseCase,
-) : ViewModel() {
-    var title by mutableStateOf("")
-        private set
+class TaskViewModel
+    @Inject
+    constructor(
+        private val addTaskUseCase: AddTaskUseCase,
+    ) : ViewModel() {
+        var title by mutableStateOf("")
+            private set
 
-    var description by mutableStateOf("")
-        private set
+        var description by mutableStateOf("")
+            private set
 
-    var isSaving by mutableStateOf(false)
-        private set
+        var isSaving by mutableStateOf(false)
+            private set
 
-    fun onTitleChange(newTitle: String) {
-        title = newTitle
-    }
+        fun onTitleChange(newTitle: String) {
+            title = newTitle
+        }
 
-    fun onDescriptionChange(newDesc: String) {
-        description = newDesc
-    }
+        fun onDescriptionChange(newDesc: String) {
+            description = newDesc
+        }
 
-    fun saveTask(onSaved: () -> Unit) {
-        if (title.isBlank()) return
+        fun saveTask(onSaved: () -> Unit) {
+            if (title.isBlank()) return
 
-        viewModelScope.launch {
-            isSaving = true
-            addTaskUseCase(ToDoTask(title = title, description = description))
-            isSaving = false
-            onSaved()
+            viewModelScope.launch {
+                isSaving = true
+                addTaskUseCase(ToDoTask(title = title, description = description))
+                isSaving = false
+                onSaved()
+            }
         }
     }
-}

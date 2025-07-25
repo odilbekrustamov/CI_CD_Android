@@ -13,17 +13,17 @@ import android.content.Context
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
-
     @Provides
-    fun provideDatabase(@ApplicationContext context: Context): TaskDatabase {
-        return Room.databaseBuilder(
-            context,
-            TaskDatabase::class.java,
-            "task_db"
-        ).build()
-    }
+    fun provideDatabase(
+        @ApplicationContext context: Context,
+    ): TaskDatabase =
+        Room
+            .databaseBuilder(
+                context,
+                TaskDatabase::class.java,
+                "task_db",
+            ).build()
 
     @Provides
     fun provideTaskDao(db: TaskDatabase): TaskDao = db.taskDao()
 }
-

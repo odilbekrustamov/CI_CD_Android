@@ -33,15 +33,16 @@ fun TaskScreen(
         },
         content = { padding ->
             Column(
-                modifier = Modifier
-                    .padding(padding)
-                    .padding(16.dp),
+                modifier =
+                    Modifier
+                        .padding(padding)
+                        .padding(16.dp),
             ) {
                 OutlinedTextField(
                     value = title,
                     onValueChange = viewModel::onTitleChange,
                     label = { Text("Title") },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
@@ -63,8 +64,6 @@ fun TaskScreen(
                     Text(if (isSaving) "Saving..." else "Save")
                 }
             }
-        }
+        },
     )
 }
-
-

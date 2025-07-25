@@ -34,7 +34,7 @@ import uz.example.cicd.domain.model.ToDoTask
 fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
     onTaskClick: (ToDoTask) -> Unit,
-    onAddClick: () -> Unit
+    onAddClick: () -> Unit,
 ) {
     val tasks by viewModel.tasks
     val isLoading by viewModel.isLoading
@@ -49,22 +49,24 @@ fun HomeScreen(
             }) {
                 Icon(Icons.Default.Add, contentDescription = "Add Task")
             }
-        }
+        },
     ) { padding ->
         if (isLoading) {
             Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(padding),
-                contentAlignment = Alignment.Center
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .padding(padding),
+                contentAlignment = Alignment.Center,
             ) {
                 CircularProgressIndicator()
             }
         } else {
             LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(padding)
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .padding(padding),
             ) {
                 items(tasks.size) { index ->
                     TaskItem(task = tasks[index], onClick = { onTaskClick(tasks[index]) })
@@ -77,14 +79,15 @@ fun HomeScreen(
 @Composable
 fun TaskItem(
     task: ToDoTask,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
     Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp)
-            .clickable { onClick() },
-        elevation = CardDefaults.cardElevation(4.dp)
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(8.dp)
+                .clickable { onClick() },
+        elevation = CardDefaults.cardElevation(4.dp),
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(text = task.title, style = MaterialTheme.typography.titleMedium)
