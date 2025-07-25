@@ -68,14 +68,6 @@ jobs:
           name: debug-apk
           path: app/build/outputs/apk/debug/app-debug.apk
 
-      # ✅ Comment PR with result (only on PR)
-      - name: Comment PR with test results
-        uses: thollander/actions-comment-pull-request@v2
-        if: github.event_name == 'pull_request'
-        with:
-          message: |
-            ✅ All checks passed!
-
       # ✅ Telegram notification
       - name: Notify via Telegram
         run: |
