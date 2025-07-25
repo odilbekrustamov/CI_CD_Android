@@ -7,6 +7,8 @@ plugins {
     id("jacoco")
     id("org.jlleitschuh.gradle.ktlint")
     id("io.gitlab.arturbosch.detekt") version "1.23.8"
+    id("org.jetbrains.kotlin.kapt")
+    id("dagger.hilt.android.plugin")
 }
 
 android {
@@ -72,6 +74,7 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.androidx.navigation.compose)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -79,6 +82,23 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    // Hilt
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
+
+    // Room
+    implementation(libs.room.runtime)
+    kapt(libs.room.compiler)
+    implementation(libs.room.ktx)
+
+    // ViewModel & Lifecycle
+    implementation(libs.lifecycle.viewmodel.ktx)
+    implementation(libs.lifecycle.runtime.ktx)
+    implementation(libs.lifecycle.viewmodel.compose)
+
+    // Hilt Navigation Compose
+    implementation(libs.hilt.navigation.compose)
 }
 
 jacoco {
@@ -125,5 +145,5 @@ tasks.register("ciFull") {
 }
 
 tasks.register("verifyCodeQuality") {
-    dependsOn("ktlintCheck", "detekt", "lintDebug", "ktlintFormat")
+    dependsOn("ktlintCheck", "detekt", "lintDebug")
 }
